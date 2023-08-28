@@ -1,7 +1,9 @@
-{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $email := promptStringOnce . "email" "Email address" "$GITHUBUSER@noreply.github.com" }}
+{{- $name := promptStringOnce . "name" "Full name" }}
 
 [data]
     email = {{ $email | quote }}
+    name = {{ $name | quote }}
 
 [edit]
     command = "code"

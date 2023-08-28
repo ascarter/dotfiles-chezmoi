@@ -23,7 +23,7 @@ prompt_git_setup () {
     unset GIT_PS1_SHOWCOLORHINTS
 
     # Load git prompt
-    source ${DOTFILES}/etc/git/git-prompt.sh
+    source ${HOME}/.local/etc/git/git-prompt.sh
 
     # Set Git PS conditions
     [[ -n ${dirty} ]] && export GIT_PS1_SHOWDIRTYSTATE="true"

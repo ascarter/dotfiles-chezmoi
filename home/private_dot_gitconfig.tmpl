@@ -1,6 +1,6 @@
 [user]
 	name = {{ .name | quote }}
-	email = {{ .email | $GITHUBUSER@users.noreply.github.com }}
+	email = {{ .email | quote }}
 [core]
     autocrlf = input
     editor = $EDITOR
@@ -31,7 +31,7 @@
 [merge]
 	tool = opendiff
     guitool = vscode
-{{-else if eq .chezmoi.os "linux" }}
+{{- else if eq .chezmoi.os "linux" }}
 [diff]
 	tool = vimdiff
     guitool = vscode
