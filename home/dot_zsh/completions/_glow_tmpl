@@ -1,0 +1,6 @@
+{{- if lookPath "glow" | isExecutable }}
+# Glow
+
+{{ output "glow" "completion" "zsh" }}
+
+{{- end }}

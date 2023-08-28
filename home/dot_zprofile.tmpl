@@ -1,0 +1,10 @@
+# zsh login environment configuration
+
+{{ if stat "/opt/homebrew/bin/brew" -}}
+# {{ output "/opt/homebrew/bin/brew" "shellenv" | trim }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export HOMEBREW_NO_EMOJI=1
+# Disable brew analytics
+# brew analytics off
+fpath+=($HOMEBREW_PREFIX/share/zsh/site-functions $HOMEBREW_PREFIX/share/zsh/zsh-completions)
+{{ end -}}

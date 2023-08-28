@@ -1,0 +1,6 @@
+{{- if lookPath "gh" | isExecutable }}
+# GitHub CLI
+
+{{ output "gh" "completion" "-s" "zsh" }}
+
+{{- end }}

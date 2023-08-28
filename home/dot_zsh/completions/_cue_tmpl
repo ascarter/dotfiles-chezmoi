@@ -1,0 +1,6 @@
+{{- if lookPath "cue" | isExecutable }}
+# Cue
+
+{{ output "cue" "completion" "zsh" }}
+
+{{- end }}

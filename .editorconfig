@@ -9,6 +9,8 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[/*gitconfig.tmpl]
-mode = ini-file
+[home/dot_zsh/**/*]
+mode = unix-shell-script
 
+[home/*_gitconfig.tmpl]
+mode = ini-file

@@ -1,0 +1,6 @@
+{{- if lookPath "op" | isExecutable }}
+# 1Password
+
+{{ output "op" "completion" "zsh" }}
+
+{{- end }}

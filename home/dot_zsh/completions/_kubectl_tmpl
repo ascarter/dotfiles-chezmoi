@@ -1,0 +1,6 @@
+{{- if lookPath "kubectl" | isExecutable }}
+# Kubernetes
+
+{{ output "kubectl" "completion" "zsh" }}
+
+{{- end }}

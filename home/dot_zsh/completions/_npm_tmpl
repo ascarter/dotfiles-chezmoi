@@ -1,0 +1,6 @@
+{{- if lookPath "npm" | isExecutable }}
+# NPM
+
+{{ output "npm" "completion" }}
+
+{{- end }}
