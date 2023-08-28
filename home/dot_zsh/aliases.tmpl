@@ -93,7 +93,8 @@ fi
 
 # chezmoi
 alias cz=chezmoi
-alias dotfiles='cd $(chezmoi ${DOTFILES}/'
+alias dotfiles='cd $(chezmoi source-path)/..'
+alias dfedit='code --new-window $(chezmoi source-path)/..'
 
 # zsh
 alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'

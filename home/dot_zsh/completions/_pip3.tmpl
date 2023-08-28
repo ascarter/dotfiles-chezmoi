@@ -1,6 +1,3 @@
-{{- if lookPath "pip3" | isExecutable }}
-# pip 3
-
-{{ output "pip3" "completion" "--zsh" }}
-
-{{- end }}
+{{- if lookPath "pip3" | isExecutable -}}
+{{- output "pip3" "completion" "--zsh" -}}
+{{- end -}}

@@ -1,6 +1,3 @@
-{{- if lookPath "rustup" | isExecutable }}
-# Rustup
-
-{{ output "rustup" "completions" "zsh" }}
-
-{{- end }}
+{{- if lookPath "rustup" | isExecutable -}}
+{{- output "rustup" "completions" "zsh" -}}
+{{- end -}}

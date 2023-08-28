@@ -3,7 +3,7 @@
 # Config order (system wide then user):
 # zshenv ➜ zprofile ➜ zshrc ➜ zlogin ➜ zlogout
 
-fpath=(${HOME}/.zsh/functions ${HOME}/.zsh/prompts ${HOME}/.zsh/completions $fpath)
+fpath+=(${HOME}/.zsh/functions ${HOME}/.zsh/prompts ${HOME}/.zsh/completions)
 
 autoload -Uz compinit
 compinit -u

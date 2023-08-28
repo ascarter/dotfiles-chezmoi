@@ -1,6 +1,3 @@
-{{- if lookPath "volta" | isExecutable }}
-# Volta
-
-{{ output "volta" "completions" "zsh" }}
-
-{{- end }}
+{{- if lookPath "volta" | isExecutable -}}
+{{- output "volta" "completions" "zsh" -}}
+{{- end -}}
