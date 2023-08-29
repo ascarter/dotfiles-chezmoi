@@ -125,12 +125,11 @@ fi
 # SSH
 # ========================================
 
-{{- if eq .chezmoi.os "darwin" }}
 # Use 1Password SSH Agent if installed
 if [ -S ${HOME}/.1password/agent.sock ]; then
   export SSH_AUTH_SOCK=${HOME}/.1password/agent.sock
+{{- if eq .chezmoi.os "linux" }}
 else
-{{- else if eq .chezmoi.os "linux" }}
 {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
   # WSL - use named pipe to Windows host ssh-agent
   if type npiperelay.exe &>/dev/null; then
@@ -163,10 +162,10 @@ fi
 # ========================================
 [[ -e ${HOME}/.zsh_local ]] && source ${HOME}/.zsh_local
 
+{{- if eq .chezmoi.os "linux" }}
 # ========================================
 # Banners and messages
 # ========================================
 
-{{- if eq .chezmoi.os "linux" }}
 if [ -x "$(command -v show-motd)" ] && show-motd login
 {{- end }}
