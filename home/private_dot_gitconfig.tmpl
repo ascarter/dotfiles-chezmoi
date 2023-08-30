@@ -9,21 +9,23 @@
 	defaultBranch = main
 {{- $ghPath := lookPath "gh" -}}
 {{- $opPath := lookPath "op" -}}
+{{- $gcmPath := lookPath "git-credential-manager" }}
 {{- $gitCredentialHelper := "" -}}
 {{- if $opPath }}
-{{-   $gitCredentialHelper = ($opPath | printf "%s plugin run -- gh") -}}
+{{-   $gitCredentialHelper = ($opPath | printf "%s plugin run -- gh auth git-credential") -}}
 {{- else if $ghPath -}}
-{{-   $gitCredentialHelper = $ghPath -}}
+{{-   $gitCredentialHelper = ($ghPath | printf "%s auth git-credential") -}}
+{{- else if $gcmPath -}}
+{{-   $gitCredentialHelper = $gcmPath -}}
 {{- end -}}
 {{- if $gitCredentialHelper }}
 [credential "https://github.com"]
 	helper =
-	helper = !{{ $gitCredentialHelper }} auth git-credential
+	helper = !{{ $gitCredentialHelper }}
 [credential "https://gist.github.com"]
 	helper =
-	helper = !{{ $gitCredentialHelper }} auth git-credential
+	helper = !{{ $gitCredentialHelper }}
 {{- end }}
-{{- $gcmPath := lookPath "git-credential-manager" }}
 {{- if $gcmPath }}
 [credential "https://dev.azure.com"]
 	helper =
