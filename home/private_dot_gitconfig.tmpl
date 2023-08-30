@@ -31,7 +31,7 @@
 {{- if $gcmPath }}
 {{-   $hosts := list
         "https://dev.azure.com"
-        "https://msdata.visualstudio.com" }}
+        "https://*.visualstudio.com" }}
 {{-   range $hosts }}
 [credential {{ . | quote }}]
 	helper =
