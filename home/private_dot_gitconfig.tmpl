@@ -7,30 +7,37 @@
 	excludesFile = ~/.gitignore
 [init]
 	defaultBranch = main
-{{- $ghPath := lookPath "gh" -}}
-{{- $opPath := lookPath "op" -}}
+{{- $ghPath := lookPath "gh" }}
+{{- $opPath := lookPath "op" }}
 {{- $gcmPath := lookPath "git-credential-manager" }}
-{{- $gitCredentialHelper := "" -}}
+{{- $gitCredentialHelper := "" }}
 {{- if $opPath }}
-{{-   $gitCredentialHelper = ($opPath | printf "%s plugin run -- gh auth git-credential") -}}
-{{- else if $ghPath -}}
-{{-   $gitCredentialHelper = ($ghPath | printf "%s auth git-credential") -}}
-{{- else if $gcmPath -}}
-{{-   $gitCredentialHelper = $gcmPath -}}
-{{- end -}}
+{{-   $gitCredentialHelper = ($opPath | printf "%s plugin run -- gh auth git-credential") }}
+{{- else if $ghPath }}
+{{-   $gitCredentialHelper = ($ghPath | printf "%s auth git-credential") }}
+{{- else if $gcmPath }}
+{{-   $gitCredentialHelper = $gcmPath }}
+{{- end }}
 {{- if $gitCredentialHelper }}
-[credential "https://github.com"]
+{{-   $hosts := list
+        "https://github.com"
+        "https://gist.github.com" }}
+{{-   range $hosts }}
+[credential {{ . | quote }}]
 	helper =
 	helper = !{{ $gitCredentialHelper }}
-[credential "https://gist.github.com"]
-	helper =
-	helper = !{{ $gitCredentialHelper }}
+{{-   end }}
 {{- end }}
 {{- if $gcmPath }}
-[credential "https://dev.azure.com"]
+{{-   $hosts := list
+        "https://dev.azure.com"
+        "https://msdata.visualstudio.com" }}
+{{-   range $hosts }}
+[credential {{ . | quote }}]
 	helper =
 	helper = {{ $gcmPath }}
 	useHttpPath = true
+{{-   end }}
 {{- end }}
 [color]
 	ui = auto
