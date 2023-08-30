@@ -1,0 +1,51 @@
+#!/bin/sh
+
+{{- if eq .chezmoi.os "darwin" }}
+set -eufo pipefail
+
+echo "Installing macOS packages"
+
+# Install Rosetta 2
+if [[ "$(sysctl -n machdep.cpu.brand_string)" == *'Apple'* ]] && ! arch -x86_64 /usr/bin/true 2> /dev/null; then
+  sudo softwareupdate --install-rosetta --agree-to-license
+fi
+
+# Install Xcode Command Line Tools
+if ! xcode-select -p >/dev/null 2>&1; then
+  xcode-select --install
+  sudo xcodebuild -license accept
+fi
+
+# Install Homebrew (/opt/homebrew)
+if ! [ -e /opt/homebrew ]; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# Enable brew command
+eval $(/opt/homebrew/bin/brew shellenv)
+
+# Install Homebrew packages
+if ! brew bundle -q --global check; then
+  brew bundle --global install
+fi
+
+# Enable PostgreSQL CLI
+if [ -d /Applications/Postgres.app ] && ! [ -f /etc/paths.d/postgresapp ]; then
+  echo "Enable PostgreSQL CLI"
+  sudo mkdir -p /etc/paths.d
+  echo /Applications/Postgres.app/Contents/Versions/latest/bin | sudo tee /etc/paths.d/postgresapp
+fi
+
+# Install tailscale
+if ! [ -d /Applications/Tailscale.app ]; then
+  echo "Install tailscale"
+  mas install 1475387142
+fi
+
+# Enable 1Password SSH integration
+if [ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ] && ! [ -S ~/.1password/agent.sock ]; then
+  echo "Enable 1Password SSH agent"
+  mkdir -p ~/.1password
+  ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
+fi
+{{- end }}

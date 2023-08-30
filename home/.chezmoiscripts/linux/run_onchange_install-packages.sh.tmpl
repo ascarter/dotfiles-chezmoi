@@ -1,0 +1,33 @@
+#!/bin/sh
+
+set -eufo pipefail
+
+{{- if eq .chezmoi.os "linux" }}
+
+echo "Installing Linux packages"
+
+{{- if eq .chezmoi.osRelease.id "ubuntu" }}
+  echo "Installing packages for $(lsb_release -d -s)"
+
+  # Update distro
+  sudo apt update
+  sudo apt upgrade -y
+
+  # Install packages
+  sudo apt install -y apt-transport-https \
+                      build-essential \
+                      curl \
+                      git \
+                      wget \
+                      zip \
+                      zsh
+{{- end }}
+
+# Configure zsh if installed
+if [ -x "$(command -v zsh)" ]; then
+  [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
+else
+  echo "zsh shell not installed"
+fi
+
+{{- end }}
