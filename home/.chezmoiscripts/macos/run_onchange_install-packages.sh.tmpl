@@ -49,4 +49,16 @@ if [ -S ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ] && !
   ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
 fi
 
+# Enable 1Password plugins
+if [ -x /usr/local/bin/op ]; then
+  echo "Enable 1Password plugins"
+{{- $plugins := list "gh" }}
+{{- range $plugins }}
+  if ! alias {{ . }} >/dev/null 2>&1; then
+    echo "Enabling {{ . }} plugin"
+    op plugin init {{ . }}
+  fi
+{{- end }}
+fi
+
 {{- end }}
