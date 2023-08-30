@@ -7,14 +7,21 @@
 	excludesFile = ~/.gitignore
 [init]
 	defaultBranch = main
-{{- $ghPath := lookPath "gh" }}
-{{- if $ghPath }}
+{{- $ghPath := lookPath "gh" -}}
+{{- $opPath := lookPath "op" -}}
+{{- $gitCredentialHelper := "" -}}
+{{- if $opPath }}
+{{-   $gitCredentialHelper = ($opPath | printf "%s plugin run -- gh") -}}
+{{- else if $ghPath -}}
+{{-   $gitCredentialHelper = $ghPath -}}
+{{- end -}}
+{{- if $gitCredentialHelper }}
 [credential "https://github.com"]
 	helper =
-	helper = !{{ $ghPath }} auth git-credential
+	helper = !{{ $gitCredentialHelper }} auth git-credential
 [credential "https://gist.github.com"]
 	helper =
-	helper = !{{ $ghPath }} auth git-credential
+	helper = !{{ $gitCredentialHelper }} auth git-credential
 {{- end }}
 {{- $gcmPath := lookPath "git-credential-manager" }}
 {{- if $gcmPath }}
