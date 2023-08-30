@@ -2,8 +2,6 @@
 
 set -eufo pipefail
 
-{{- if eq .chezmoi.os "linux" }}
-
 echo "Installing Linux packages"
 
 {{- if eq .chezmoi.osRelease.id "ubuntu" }}
@@ -29,5 +27,3 @@ if [ -x "$(command -v zsh)" ]; then
 else
   echo "zsh shell not installed"
 fi
-
-{{- end }}

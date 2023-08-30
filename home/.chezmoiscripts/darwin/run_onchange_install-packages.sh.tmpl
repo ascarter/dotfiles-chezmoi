@@ -1,6 +1,5 @@
 #!/bin/sh
 
-{{- if eq .chezmoi.os "darwin" }}
 set -eufo pipefail
 
 echo "Installing macOS packages"
@@ -60,5 +59,3 @@ if [ -x /usr/local/bin/op ]; then
   fi
 {{- end }}
 fi
-
-{{- end }}

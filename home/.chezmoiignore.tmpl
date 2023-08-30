@@ -1,0 +1,9 @@
+{{- if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/macos/**
+.config/1Password
+.Brewfile
+{{- end }}
+
+{{- if ne .chezmoi.os "linux" }}
+.chezmoiscripts/linux/**
+{{- end }}
