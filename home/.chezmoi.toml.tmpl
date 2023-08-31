@@ -1,32 +1,21 @@
-{{/* boolean feature tags */}}
-{{- $devcontainer := false -}}{{/* true if this machine is devcontainer */}}
-{{- $personal     := false -}}{{/* true if this machine should have personal secrets */}}
-{{- $alpental     := false -}}{{/* true if this machine should have alpental configuration */}}
-{{- $microsoft    := false -}}{{/* true if this machine should have microsoft configuration */}}
+{{- $roles := list
+      "personal"
+      "work"
+      "devcontainer" }}
+{{- $role := promptChoiceOnce . "role" "Machine role" $roles (index $roles 0) }}
 
-{{/* Prompts */}}
-{{- $email := promptStringOnce . "email" "Email address" "ascarter@users.noreply.github.com" }}
-
-{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, VMs */}}
-{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vscode") -}}
-{{-   $devcontainer = true -}}
-{{- end -}}
-
-{{/* Detect if Microsoft machine */}}
-{{ "" }}
-
-{{/* System information */}}
 {{- $onepasswordAccount := (output "op" "user" "get" "--me" "--format" "json" | mustFromJson).id }}
+{{- $email := "ascarter@users.noreply.github.com" }}
+{{- $vault := "Developer" }}
+{{- $signingKeyURI := printf "op://%s/SSH Key/public key" $vault }}
 
 [data]
     email = {{ $email | quote }}
     name = "Andrew Carter"
     githubUser = "ascarter"
     onepasswordAccount = {{ $onepasswordAccount | quote }}
-    devcontainer = {{ $devcontainer }}
-    personal = {{ $personal }}
-    alpental = {{ $alpental }}
-    microsoft = {{ $microsoft }}
+    signingKeyURI = {{ $signingKeyURI | quote }}
+    role = {{ $role | quote }}
 
 [edit]
     command = "code"
