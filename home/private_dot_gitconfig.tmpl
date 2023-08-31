@@ -1,12 +1,16 @@
 [user]
 	name = {{ .name | quote }}
 	email = {{ .email | quote }}
+
 [core]
 	autocrlf = input
 	editor = $EDITOR
 	excludesFile = ~/.gitignore
+
 [init]
 	defaultBranch = main
+
+{{/* Credential helpers */}}
 {{- $ghPath := lookPath "gh" }}
 {{- $opPath := lookPath "op" }}
 {{- $gcmPath := lookPath "git-credential-manager" }}
@@ -20,8 +24,8 @@
 {{- end }}
 {{- if $gitCredentialHelper }}
 {{-   $hosts := list
-        "https://github.com"
-        "https://gist.github.com" }}
+				"https://github.com"
+				"https://gist.github.com" }}
 {{-   range $hosts }}
 [credential {{ . | quote }}]
 	helper =
@@ -30,8 +34,8 @@
 {{- end }}
 {{- if $gcmPath }}
 {{-   $hosts := list
-        "https://dev.azure.com"
-        "https://*.visualstudio.com" }}
+				"https://dev.azure.com"
+				"https://*.visualstudio.com" }}
 {{-   range $hosts }}
 [credential {{ . | quote }}]
 	helper =
@@ -39,8 +43,30 @@
 	useHttpPath = true
 {{-   end }}
 {{- end }}
+
+{{/* Signing commits */}}
+{{- $signingKey := onepasswordRead .signingKeyURI .onepasswordAccount }}
+{{- $signingCmd := "" }}
+{{- if and (eq .chezmoi.os "darwin") (stat "/Applications/1Password.app") }}
+{{-   $signingCmd = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" }}
+{{-   if $signingKey }}
+[user]
+	signingkey = {{ $signingKey }}
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = {{ $signingCmd }}
+
+[commit]
+	gpgsign = true
+{{-   end}}
+{{- end }}
+
 [color]
 	ui = auto
+
 [color "status"]
 	added = green bold
 	changed = red bold
@@ -48,18 +74,25 @@
 	branch = yellow bold
 	localBranch = yellow bold
 	remoteBranch = cyan bold
+
+{{/* Tools */}}
 [difftool]
 	prompt = false
+
 [difftool "vscode"]
 	cmd = code --wait --new-window --diff $LOCAL $REMOTE
+
 [mergetool "vscode"]
 	cmd = code --wait --new-window --merge $REMOTE $LOCAL $BASE $MERGED
+
 {{- if eq .chezmoi.os "darwin" }}
 [difftool "bbdiff"]
 	cmd = bbdiff --wait --resume $LOCAL $REMOTE
+
 [diff]
 	tool = opendiff
 	guitool = vscode
+
 [merge]
 	tool = opendiff
 	guitool = vscode
@@ -67,17 +100,21 @@
 [diff]
 	tool = vimdiff
 	guitool = vscode
+
 [merge]
 	tool = vimdiff
 	guitool = vscode
 {{- end }}
+
 [instaweb]
 	httpd = webrick
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
 [alias]
 	aliases = !git config -l | grep alias | cut -c 7-
 	amend = commit --amend

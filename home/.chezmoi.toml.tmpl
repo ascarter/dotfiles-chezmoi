@@ -1,9 +1,32 @@
+{{/* boolean feature tags */}}
+{{- $devcontainer := false -}}{{/* true if this machine is devcontainer */}}
+{{- $personal     := false -}}{{/* true if this machine should have personal secrets */}}
+{{- $alpental     := false -}}{{/* true if this machine should have alpental configuration */}}
+{{- $microsoft    := false -}}{{/* true if this machine should have microsoft configuration */}}
+
+{{/* Prompts */}}
 {{- $email := promptStringOnce . "email" "Email address" "ascarter@users.noreply.github.com" }}
+
+{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, VMs */}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "ubuntu" "vscode") -}}
+{{-   $devcontainer = true -}}
+{{- end -}}
+
+{{/* Detect if Microsoft machine */}}
+{{ "" }}
+
+{{/* System information */}}
+{{- $onepasswordAccount := (output "op" "user" "get" "--me" "--format" "json" | mustFromJson).id }}
 
 [data]
     email = {{ $email | quote }}
     name = "Andrew Carter"
     githubUser = "ascarter"
+    onepasswordAccount = {{ $onepasswordAccount | quote }}
+    devcontainer = {{ $devcontainer }}
+    personal = {{ $personal }}
+    alpental = {{ $alpental }}
+    microsoft = {{ $microsoft }}
 
 [edit]
     command = "code"

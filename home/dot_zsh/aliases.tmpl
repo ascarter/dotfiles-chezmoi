@@ -99,6 +99,11 @@ alias dfedit='code --new-window $(chezmoi source-path)/..'
 # zsh
 alias resetcomp='rm -f ${HOME}/.zcompdump && compinit'
 
+{{- if lookPath "op" }}
+# 1Password
+alias 1pid='op user get --me --format json | jq .id -r'
+{{- end }}
+
 # Projects
 alias projects='cd ${HOME}/Projects'
 

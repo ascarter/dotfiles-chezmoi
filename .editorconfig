@@ -14,3 +14,4 @@ mode = unix-shell-script
 
 [home/*_gitconfig.tmpl]
 mode = ini-file
+indent_style = tab
