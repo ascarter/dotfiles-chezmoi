@@ -1,0 +1,83 @@
+#!/bin/sh
+
+set -eufo pipefail
+
+echo "Configuring packages for Linux"
+
+{{- if eq .chezmoi.osRelease.id "ubuntu" }}
+echo "Provisioning for $(lsb_release -d -s)"
+
+# Add repositories
+
+check_apt_repo() { apt-cache policy | grep ${1} > /dev/null }
+
+# Microsoft GPG key
+if ! [ -f /usr/share/keyrings/microsoft-archive-keyring.gpg ]; then
+  curl https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
+fi
+
+# Azure CLI
+if ! check_apt_repo "https://packages.microsoft.com/repos/azure-cli"; then
+  echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/azure-cli $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+fi
+
+# GitHub CLI
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian-ubuntu-linux-apt
+if ! check_apt_repo "https://cli.github.com"; then
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list
+fi
+
+# Speedtest
+# https://www.speedtest.net/apps/cli
+if ! check_apt_repo "https://packagecloud.io/ookla/speedtest"; then
+  curl -fsSL https://packagecloud.io/ookla/speedtest-cli/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg
+  echo "deb [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee /etc/apt/sources.list.d/ookla_speedtest-cli.list
+  echo "deb-src [signed-by=/usr/share/keyrings/ookla_speedtest-cli-archive-keyring.gpg] https://packagecloud.io/ookla/speedtest-cli/ubuntu/ jammy main" | sudo tee -a /etc/apt/sources.list.d/ookla_speedtest-cli.list
+fi
+
+{{- $packages := list
+      "apt-transport-https"
+      "az-cli"
+      "build-essential"
+      "ca-certificates"
+      "curl"
+      "dirmngr"
+      "duf"
+      "exa"
+      "g++"
+      "gcc"
+      "gh"
+      "git"
+      "gitg"
+      "gnupg-agent"
+      "gnupg"
+      "groff"
+      "htop"
+      "jq"
+      "make"
+      "mc"
+      "neofetch"
+      "pass"
+      "socat"
+      "speedtest"
+      "tmux"
+      "vim-gtk3"
+      "wget"
+      "zip"
+      "zsh" }}
+
+  # Update distro
+  sudo apt update
+  sudo apt upgrade -y
+
+  # Install packages
+  sudo apt install -y {{  join " " ($packages | sortAlpha | uniq) }}
+{{- end }}
+
+# Configure zsh if installed
+if [ -x "$(command -v zsh)" ]; then
+  [ ${SHELL} != "/bin/zsh" ] && chsh -s /bin/zsh
+else
+  echo "zsh shell not installed"
+fi
