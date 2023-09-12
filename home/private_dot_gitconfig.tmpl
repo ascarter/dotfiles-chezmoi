@@ -44,12 +44,13 @@
 {{-   end }}
 {{- end }}
 
+{{- if $opPath }}
 {{/* Signing commits */}}
-{{- $signingKey := onepasswordRead .signingKeyURI .onepasswordAccount }}
-{{- $signingCmd := "" }}
-{{- if and (eq .chezmoi.os "darwin") (stat "/Applications/1Password.app") }}
-{{-   $signingCmd = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" }}
-{{-   if $signingKey }}
+{{-   $signingKey := onepasswordRead .signingKeyURI .onepasswordAccount }}
+{{-   $signingCmd := "" }}
+{{-   if and (eq .chezmoi.os "darwin") (stat "/Applications/1Password.app") }}
+{{-     $signingCmd = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign" }}
+{{-     if $signingKey }}
 [user]
 	signingkey = {{ $signingKey }}
 
@@ -61,8 +62,9 @@
 
 [commit]
 	gpgsign = true
-{{-   end}}
-{{- end }}
+{{-     end}}
+{{-   end }}
+{{- end}}
 
 [color]
 	ui = auto
