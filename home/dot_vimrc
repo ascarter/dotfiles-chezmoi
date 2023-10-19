@@ -80,7 +80,7 @@ endif
 
 set background=dark
 try
-  colorscheme xcode
+  colorscheme nord
 catch
   colorscheme default
 endtry
@@ -137,6 +137,7 @@ if has('statusline')
 
   " Lightline
   let g:lightline = {
+        \ 'colorscheme': 'nord',
         \ 'active': {
         \ 'left': [ [ 'mode', 'paste' ],
         \    [ 'gitbranch', 'readonly', 'filename', 'modified', 'sy' ] ]
