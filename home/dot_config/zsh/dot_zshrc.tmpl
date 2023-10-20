@@ -86,6 +86,11 @@ export TEXEDIT='vim +%d %s'
 export PAGER="less -r"
 export LESS="--status-column --long-prompt --no-init --quit-if-one-screen --quit-at-eof -R"
 
+{{- if eq .chezmoi.os "linux" }}
+# Set dircolors  to Nord palette
+test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
+{{- end }}
+
 # ========================================
 # Developer Tools
 # ========================================
