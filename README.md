@@ -5,5 +5,5 @@ Dotfiles managed by chezmoi
 A full install script can be run using the following command:
 
 ```sh
-sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles/main/install.sh)"
+sh -c "$(curl -sSL https://raw.githubusercontent.com/ascarter/dotfiles-chezmoi/main/install.sh)"
 ```
